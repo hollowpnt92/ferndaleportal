@@ -5,14 +5,20 @@
     <p class="hero-lead"><%= site.heroSubtitle %></p>
   </div>
 </section>
-<div class="layout home-with-poll">
-  <div class="home-main">
-    <div class="card prose">
+<% var _homeOrder = typeof homeSectionOrder !== 'undefined' ? homeSectionOrder : ['intro','calendar','quick','poll']; %>
+<% var _showPoll = typeof poll !== 'undefined' && poll && _homeOrder.indexOf('poll') !== -1; %>
+<% var _pollFirst = _showPoll && _homeOrder[0] === 'poll'; %>
+<div id="main" class="layout home-sections<% if (_showPoll) { %> home-sections--with-poll<% } %><% if (_pollFirst) { %> home-sections--poll-first<% } %>" tabindex="-1">
+<% if (_showPoll) { %><div class="home-main-column"><% } %>
+<% _homeOrder.forEach(function (key) { %>
+  <% if (key === 'poll' && _showPoll) { return; } %>
+  <% if (key === 'intro') { %>
+    <div class="card prose home-block home-block-intro">
       <%- site.homeContent %>
     </div>
-
+  <% } else if (key === 'calendar') { %>
     <% if (typeof calendar !== 'undefined' && calendar && calendar.configured) { %>
-    <section class="calendar-widget card" aria-labelledby="cal-heading">
+    <section class="calendar-widget card home-block home-block-calendar" aria-labelledby="cal-heading">
       <div class="calendar-widget-head">
         <h2 id="cal-heading">Upcoming events</h2>
         <p class="calendar-widget-sub">Next 7 days from now</p>
@@ -40,7 +46,8 @@
       <% } %>
     </section>
     <% } %>
-    <div class="quick-strip" role="navigation" aria-label="Quick links">
+  <% } else if (key === 'quick') { %>
+    <div class="quick-strip home-block home-block-quick" role="navigation" aria-label="Quick links">
       <% site.navLinks.filter(function (l) { return l.path !== '/'; }).slice(0, 4).forEach(function (link) { %>
         <a class="quick-card" href="<%= link.path %>" <%= link.external ? 'target="_blank" rel="noopener"' : '' %>>
           <strong><%= link.label %></strong>
@@ -48,9 +55,8 @@
         </a>
       <% }); %>
     </div>
-  </div>
-  <% if (typeof poll !== 'undefined' && poll) { %>
-    <%- include('partials/poll-sidebar') %>
   <% } %>
+<% }); %>
+<% if (_showPoll) { %></div><%- include('partials/poll-sidebar') %><% } %>
 </div>
 <%- include('partials/bottom') %>

@@ -149,6 +149,42 @@
     return card;
   }
 
+  var homeSectionOrderList = document.getElementById("home-section-order-list");
+  var HOME_SECTION_LABELS = {
+    intro: "Introduction (homepage body)",
+    calendar: "Events calendar",
+    quick: "Quick link cards",
+    poll: "Community poll",
+  };
+  var DEFAULT_HOME_SECTION_ORDER = ["intro", "calendar", "quick", "poll"];
+
+  function buildHomeSectionRow(sectionKey, listEl) {
+    var row = document.createElement("div");
+    row.className = "sortable-item";
+    row.dataset.sectionKey = sectionKey;
+    row.innerHTML =
+      '<button type="button" class="drag-handle" aria-label="Drag to reorder" title="Drag to reorder">' +
+      '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' +
+      '<circle cx="7" cy="5" r="1.5"/><circle cx="13" cy="5" r="1.5"/>' +
+      '<circle cx="7" cy="10" r="1.5"/><circle cx="13" cy="10" r="1.5"/>' +
+      '<circle cx="7" cy="15" r="1.5"/><circle cx="13" cy="15" r="1.5"/></svg></button>' +
+      '<div class="item-fields" style="flex:1;"><span class="home-section-label"></span></div>';
+    row.querySelector(".home-section-label").textContent =
+      HOME_SECTION_LABELS[sectionKey] || sectionKey;
+    listEl.appendChild(row);
+    return row;
+  }
+
+  function collectHomeSectionOrder() {
+    if (!homeSectionOrderList) return DEFAULT_HOME_SECTION_ORDER.slice();
+    var keys = [];
+    homeSectionOrderList.querySelectorAll(".sortable-item").forEach(function (row) {
+      var k = row.dataset.sectionKey;
+      if (k) keys.push(k);
+    });
+    return keys.length ? keys : DEFAULT_HOME_SECTION_ORDER.slice();
+  }
+
   function collectPayload() {
     var navRows = navList.querySelectorAll(".sortable-item");
     var memberRows = memberNavList.querySelectorAll(".sortable-item");
@@ -171,6 +207,7 @@
       heroTitle: (heroTitle && heroTitle.value.trim()) || site.heroTitle,
       heroSubtitle: (heroSubtitle && heroSubtitle.value) || "",
       homeContent: (homeContent && homeContent.value) || "",
+      homeSectionOrder: collectHomeSectionOrder(),
       navLinks: navLinks,
       memberNavLinks: memberNavLinks,
       pages: pages,
@@ -200,6 +237,29 @@
   if (heroTitle) heroTitle.value = site.heroTitle || "";
   if (heroSubtitle) heroSubtitle.value = site.heroSubtitle || "";
   if (homeContent) homeContent.value = site.homeContent || "";
+
+  var homeOrder = Array.isArray(site.homeSectionOrder) ? site.homeSectionOrder : DEFAULT_HOME_SECTION_ORDER;
+  var allowedHome = { intro: 1, calendar: 1, quick: 1, poll: 1 };
+  var seenH = {};
+  if (homeSectionOrderList) {
+    homeOrder.forEach(function (k) {
+      if (!allowedHome[k] || seenH[k]) return;
+      seenH[k] = true;
+      buildHomeSectionRow(k, homeSectionOrderList);
+    });
+    DEFAULT_HOME_SECTION_ORDER.forEach(function (k) {
+      if (!seenH[k]) buildHomeSectionRow(k, homeSectionOrderList);
+    });
+    if (typeof Sortable !== "undefined") {
+      new Sortable(homeSectionOrderList, {
+        animation: 180,
+        handle: ".drag-handle",
+        ghostClass: "sortable-ghost",
+        dragClass: "sortable-drag",
+        onEnd: updateJsonPreview,
+      });
+    }
+  }
 
   (site.navLinks || []).forEach(function (link) {
     buildNavRow(link, navList);

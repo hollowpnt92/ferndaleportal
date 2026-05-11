@@ -42,6 +42,10 @@ If calendar-related variables are incomplete, the homepage hides the calendar bl
 
 Admin-edited HTML is **sanitized** on save (dangerous tags/schemes stripped). Navigation links only allow safe internal paths or `http`/`https` URLs.
 
+### Homepage layout
+
+**Section order** is stored in `site.json` as `homeSectionOrder`: an array of `intro`, `calendar`, `quick`, and `poll` (each once). Drag **Homepage section order** in the admin editor to put the poll (or any block) first. The calendar block is skipped when Google Calendar env vars are not set.
+
 ### Homepage poll
 
 Poll data lives in **`data/poll.json`** (created from `config/poll.default.json` on first run). Admins edit the question and choices under **Edit site → Homepage poll**; **Save poll only** writes that file without touching `site.json`. Visitors vote with **name + choice**, can **add new choices** from the homepage, and see **results immediately** after voting (names and choices are public — use only if appropriate for your community). Admins can remove **individual votes** from **Edit site → Homepage poll → Current votes**. Rate limits: `RATE_LIMIT_POLL_MAX` (default 40 per 15 minutes per IP).

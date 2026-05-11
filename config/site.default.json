@@ -2,6 +2,7 @@
   "heroTitle": "Welcome to Ferndale",
   "heroSubtitle": "Connect with neighbors, find local resources, and stay informed. Whether you live here or are visiting, we're glad you're here.",
   "homeContent": "<p>Use the navigation above to explore this portal. Administrators can customize pages, links, and announcements from the admin console.</p><p><strong>Tip:</strong> Sign in with the community password to see additional links for neighbors and partners.</p>",
+  "homeSectionOrder": ["intro", "calendar", "quick", "poll"],
   "navLinks": [
     { "label": "Home", "path": "/", "external": false },
     { "label": "About", "path": "/p/about", "external": false },

@@ -119,6 +119,29 @@ function normalizePage(item) {
   return page;
 }
 
+const HOME_SECTION_KEYS = ["intro", "calendar", "quick", "poll"];
+
+/**
+ * Homepage blocks: intro (body), calendar widget, quick links, poll.
+ * Ensures each key appears once; unknown keys dropped; missing keys appended in default order.
+ */
+function normalizeHomeSectionOrder(raw) {
+  const allowed = new Set(HOME_SECTION_KEYS);
+  const seen = new Set();
+  const out = [];
+  const arr = Array.isArray(raw) ? raw : [];
+  for (const k of arr) {
+    const key = String(k || "").trim();
+    if (!allowed.has(key) || seen.has(key)) continue;
+    seen.add(key);
+    out.push(key);
+  }
+  for (const k of HOME_SECTION_KEYS) {
+    if (!seen.has(k)) out.push(k);
+  }
+  return out;
+}
+
 /** Compare passwords without leaking length via timing (best-effort). */
 function timingSafePasswordEqual(input, expected) {
   const a = String(input || "");
@@ -134,5 +157,7 @@ module.exports = {
   normalizeNavLink,
   normalizePage,
   normalizeSlug,
+  normalizeHomeSectionOrder,
+  HOME_SECTION_KEYS,
   timingSafePasswordEqual,
 };

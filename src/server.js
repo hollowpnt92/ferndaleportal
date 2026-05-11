@@ -22,6 +22,7 @@ const {
   sanitizePlainText,
   normalizeNavLink,
   normalizePage,
+  normalizeHomeSectionOrder,
   timingSafePasswordEqual,
 } = require("./security");
 
@@ -110,6 +111,7 @@ function validateSitePayload(body) {
     heroTitle,
     heroSubtitle,
     homeContent,
+    homeSectionOrder: normalizeHomeSectionOrder(body.homeSectionOrder),
     navLinks,
     memberNavLinks,
     pages,
@@ -284,11 +286,12 @@ app.get("/", async (req, res, next) => {
     const pollFlash = req.session.pollFlash || null;
     if (req.session.pollFlash) {
       delete req.session.pollFlash;
-      return req.session.save((err) => {
+      return     req.session.save((err) => {
         if (err) return next(err);
         res.render("home", {
           title: site.heroTitle,
           site,
+          homeSectionOrder: normalizeHomeSectionOrder(site.homeSectionOrder),
           calendar,
           poll,
           pollFlash,
@@ -298,6 +301,7 @@ app.get("/", async (req, res, next) => {
     res.render("home", {
       title: site.heroTitle,
       site,
+      homeSectionOrder: normalizeHomeSectionOrder(site.homeSectionOrder),
       calendar,
       poll,
       pollFlash: null,
