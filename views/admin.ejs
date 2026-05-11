@@ -1,0 +1,105 @@
+<%- include('partials/top') %>
+<section class="hero" aria-labelledby="edit-heading">
+  <div class="hero-inner">
+    <h1 id="edit-heading">Edit site</h1>
+    <p class="hero-lead">Drag rows by the handle to reorder. Changes write to <code>data/site.json</code> (persist your Docker volume).</p>
+  </div>
+</section>
+
+<div id="main" class="admin-layout layout">
+  <% if (message) { %>
+    <div class="alert alert-success" role="status"><%= message %></div>
+  <% } %>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error" role="alert"><%= error %></div>
+  <% } %>
+
+  <p class="admin-lead">Use the floating bar to save. Preview opens the public site in a new tab (save first to see edits).</p>
+
+  <section class="admin-section" aria-labelledby="hero-fields">
+    <h2 id="hero-fields">Homepage hero</h2>
+    <div class="field">
+      <label for="field-hero-title">Title</label>
+      <input type="text" id="field-hero-title" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="field-hero-subtitle">Subtitle</label>
+      <textarea id="field-hero-subtitle" rows="3"></textarea>
+    </div>
+    <div class="field">
+      <label for="field-home-content">Homepage body (HTML)</label>
+      <textarea id="field-home-content" class="page-content-area" rows="10"></textarea>
+      <p class="field-hint">HTML is sanitized on save (scripts and dangerous markup removed).</p>
+    </div>
+  </section>
+
+  <section class="admin-section" aria-labelledby="nav-public">
+    <h2 id="nav-public">Public navigation <span class="badge">Everyone</span></h2>
+    <p class="field-hint">Order matches the top menu. Internal paths look like <code>/p/about</code>; turn on “external” for full URLs.</p>
+    <div id="nav-links-list" class="sortable-list"></div>
+    <button type="button" class="btn-add" id="btn-add-nav">+ Add link</button>
+  </section>
+
+  <section class="admin-section" aria-labelledby="nav-member">
+    <h2 id="nav-member">Member navigation <span class="badge">After sign-in</span></h2>
+    <p class="field-hint">Shown next to public links when someone uses the community password.</p>
+    <div id="member-nav-links-list" class="sortable-list"></div>
+    <button type="button" class="btn-add" id="btn-add-member-nav">+ Add member link</button>
+  </section>
+
+  <section class="admin-section" aria-labelledby="pages-heading">
+    <h2 id="pages-heading">Pages</h2>
+    <p class="field-hint">Each page is available at <code>/p/your-slug</code>. Drag to change order in this list only (not the menus).</p>
+    <div id="pages-list" class="sortable-list"></div>
+    <button type="button" class="btn-add" id="btn-add-page">+ Add page</button>
+  </section>
+
+  <section class="admin-section" aria-labelledby="poll-admin-heading">
+    <h2 id="poll-admin-heading">Homepage poll <span class="badge">Public votes</span></h2>
+    <p class="field-hint">Question and choices appear in the right column on the homepage. Visitors can add choices without logging in. Use “Clear all votes” only if you need a fresh count.</p>
+    <div class="field">
+      <label for="field-poll-question">Poll question</label>
+      <input type="text" id="field-poll-question" maxlength="500" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="chk-row" style="display:flex;align-items:center;gap:0.5rem;">
+        <input type="checkbox" id="field-poll-clear-votes">
+        <span>Clear all votes when saving the poll</span>
+      </label>
+    </div>
+    <h3 class="poll-admin-sub">Answer choices (drag to reorder)</h3>
+    <div id="poll-options-admin-list" class="sortable-list"></div>
+    <button type="button" class="btn-add" id="btn-add-poll-option">+ Add choice</button>
+    <h3 class="poll-admin-sub">Current votes</h3>
+    <p class="field-hint">Remove one mistaken or abusive entry without clearing everyone.</p>
+    <div id="poll-votes-admin-list" class="poll-votes-admin-list" aria-live="polite"></div>
+    <p id="poll-votes-admin-empty" class="poll-muted" style="display:none;">No votes yet.</p>
+  </section>
+
+  <details class="details-advanced" id="admin-advanced-json">
+    <summary>Advanced — view JSON payload</summary>
+    <pre id="admin-json-preview" aria-live="polite"></pre>
+  </details>
+
+  <form method="post" action="/admin/logout" style="margin-top: 1.5rem;">
+    <button type="submit" class="btn-secondary-outline">Admin sign out</button>
+  </form>
+</div>
+
+<div class="admin-save-bar" role="region" aria-label="Save actions">
+  <span class="hint">Edits are kept in this page until you save.</span>
+  <div class="actions">
+    <button type="button" class="btn-secondary-outline" id="btn-preview-home">Preview site</button>
+    <button type="button" class="btn-secondary-outline" id="btn-save-poll">Save poll only</button>
+    <button type="button" class="btn-save-primary" id="btn-save-site">Save site</button>
+  </div>
+</div>
+
+<div id="admin-toast" class="admin-toast" role="status" aria-live="polite"></div>
+
+<script id="admin-site-data" type="application/json"><%- JSON.stringify(site).replace(/</g, '\\u003c') %></script>
+<script id="admin-poll-data" type="application/json"><%- JSON.stringify(poll).replace(/</g, '\\u003c') %></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js" crossorigin="anonymous"></script>
+<script src="/js/admin-editor.js"></script>
+
+<%- include('partials/bottom') %>

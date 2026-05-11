@@ -1,0 +1,82 @@
+<aside class="poll-sidebar card" aria-labelledby="poll-heading">
+  <h2 id="poll-heading" class="poll-heading">Community poll</h2>
+  <p class="poll-question"><%= poll.question %></p>
+
+  <% if (typeof pollFlash !== 'undefined' && pollFlash && pollFlash.message) { %>
+    <div class="poll-alert <%= pollFlash.type === 'error' ? 'poll-alert-error' : 'poll-alert-success' %>" role="alert">
+      <%= pollFlash.message %>
+    </div>
+  <% } %>
+
+  <section class="poll-section" aria-labelledby="poll-vote-label">
+    <h3 id="poll-vote-label" class="poll-subheading">Cast your vote</h3>
+    <% if (!poll.options.length) { %>
+      <p class="poll-muted">No choices yet — add one below.</p>
+    <% } else { %>
+      <form class="poll-form" method="post" action="/poll/vote">
+        <div class="poll-field">
+          <label for="poll-voter-name">Your name</label>
+          <input type="text" id="poll-voter-name" name="voterName" required maxlength="120" autocomplete="name" placeholder="e.g. Jordan Lee">
+        </div>
+        <fieldset class="poll-options-fieldset">
+          <legend class="poll-legend">Your choice</legend>
+          <% poll.options.forEach(function (opt) { %>
+            <label class="poll-radio-row">
+              <input type="radio" name="optionId" value="<%= opt.id %>" required>
+              <span><%= opt.label %></span>
+            </label>
+          <% }); %>
+        </fieldset>
+        <button type="submit" class="poll-submit">Submit vote</button>
+      </form>
+    <% } %>
+  </section>
+
+  <section class="poll-section" aria-labelledby="poll-add-label">
+    <h3 id="poll-add-label" class="poll-subheading">Suggest a new choice</h3>
+    <p class="poll-hint">Anyone can add an option for others to vote on.</p>
+    <form class="poll-form poll-form-inline" method="post" action="/poll/option">
+      <input type="text" name="label" maxlength="200" required placeholder="New choice label" aria-label="New choice label">
+      <button type="submit" class="poll-submit poll-submit-secondary">Add option</button>
+    </form>
+  </section>
+
+  <section class="poll-section poll-results" aria-labelledby="poll-results-label">
+    <h3 id="poll-results-label" class="poll-subheading">Results</h3>
+    <% if (!poll.votes.length) { %>
+      <p class="poll-muted">No votes yet. Be the first.</p>
+    <% } else { %>
+      <ul class="poll-by-option">
+        <% poll.options.forEach(function (opt) {
+             var forOpt = poll.votes.filter(function (v) { return v.optionId === opt.id; });
+        %>
+          <li class="poll-option-block">
+            <strong class="poll-option-title"><%= opt.label %></strong>
+            <span class="poll-count">(<%= forOpt.length %>)</span>
+            <% if (forOpt.length) { %>
+              <ul class="poll-voter-names">
+                <% forOpt.forEach(function (v) { %>
+                  <li><%= v.voterName %></li>
+                <% }); %>
+              </ul>
+            <% } %>
+          </li>
+        <% }); %>
+      </ul>
+      <h4 class="poll-log-heading">Vote log</h4>
+      <ol class="poll-log">
+        <% poll.votes.slice().reverse().forEach(function (v) {
+             var lbl = '';
+             poll.options.forEach(function (o) { if (o.id === v.optionId) lbl = o.label; });
+        %>
+          <li>
+            <span class="poll-log-name"><%= v.voterName %></span>
+            <span class="poll-log-sep">→</span>
+            <span class="poll-log-choice"><%= lbl || v.optionId %></span>
+            <time class="poll-log-time" datetime="<%= v.createdAt %>"><%= new Date(v.createdAt).toLocaleString() %></time>
+          </li>
+        <% }); %>
+      </ol>
+    <% } %>
+  </section>
+</aside>

@@ -1,0 +1,13 @@
+<%- include('partials/top') %>
+<section class="hero" aria-labelledby="forbidden-heading">
+  <div class="hero-inner">
+    <h1 id="forbidden-heading">Sign in required</h1>
+    <p class="hero-lead"><%= typeof message !== 'undefined' ? message : 'You need to sign in to view this page.' %></p>
+  </div>
+</section>
+<div class="layout">
+  <div class="card prose">
+    <p><a href="/login">Community sign in</a> · <a href="/">Home</a></p>
+  </div>
+</div>
+<%- include('partials/bottom') %>

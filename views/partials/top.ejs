@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' · ' : '' %><%= site.heroTitle %> · Portal</title>
+  <link rel="icon" href="/ferndale.jpg" type="image/jpeg" sizes="any">
+  <link rel="apple-touch-icon" href="/ferndale.jpg">
+  <link rel="stylesheet" href="/css/ferndale.css">
+  <% if (typeof extraCss !== "undefined" && extraCss) { %>
+  <link rel="stylesheet" href="<%= extraCss %>">
+  <% } %>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a class="brand brand-with-logo" href="/">
+      <img class="brand-mark" src="/ferndale.jpg" alt="" width="44" height="44" decoding="async">
+      <span class="brand-text">
+        <span class="brand-kicker">Community portal</span>
+        <span class="brand-title"><%= site.heroTitle %></span>
+      </span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <% site.navLinks.forEach(function (link) {
+           var href = link.external ? link.path : link.path;
+           var active = !link.external && currentPath === link.path;
+      %>
+        <a href="<%= href %>" <%= link.external ? 'target="_blank" rel="noopener"' : '' %> class="<%= active ? 'is-active' : '' %>"><%= link.label %></a>
+      <% }); %>
+      <% if (isMember || isAdmin) { %>
+        <span class="nav-sep" aria-hidden="true">|</span>
+        <% site.memberNavLinks.forEach(function (link) {
+             var href = link.external ? link.path : link.path;
+             var active = !link.external && currentPath === link.path;
+        %>
+          <a href="<%= href %>" <%= link.external ? 'target="_blank" rel="noopener"' : '' %> class="<%= active ? 'is-active' : '' %>"><%= link.label %></a>
+        <% }); %>
+      <% } %>
+    </nav>
+    <div class="auth-actions">
+      <% if (isAdmin) { %>
+        <a class="btn btn-ghost" href="/admin">Admin</a>
+        <form action="/admin/logout" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-ghost">Admin out</button>
+        </form>
+      <% } %>
+      <% if (isMember) { %>
+        <form action="/logout" method="post" style="display:inline;">
+          <button type="submit" class="btn btn-ghost">Sign out</button>
+        </form>
+      <% } else { %>
+        <a class="btn btn-primary" href="/login">Community sign in</a>
+      <% } %>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,56 @@
+<%- include('partials/top') %>
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <h1 id="hero-heading"><%= site.heroTitle %></h1>
+    <p class="hero-lead"><%= site.heroSubtitle %></p>
+  </div>
+</section>
+<div class="layout home-with-poll">
+  <div class="home-main">
+    <div class="card prose">
+      <%- site.homeContent %>
+    </div>
+
+    <% if (typeof calendar !== 'undefined' && calendar && calendar.configured) { %>
+    <section class="calendar-widget card" aria-labelledby="cal-heading">
+      <div class="calendar-widget-head">
+        <h2 id="cal-heading">Upcoming events</h2>
+        <p class="calendar-widget-sub">Next 7 days from now</p>
+      </div>
+      <% if (calendar.error) { %>
+        <p class="calendar-widget-error" role="alert"><%= calendar.error %></p>
+      <% } else if (!calendar.events.length) { %>
+        <p class="calendar-widget-empty">No events scheduled in the next week.</p>
+      <% } else { %>
+        <ul class="calendar-event-list">
+          <% calendar.events.forEach(function (ev) { %>
+            <li class="calendar-event">
+              <% if (ev.link) { %>
+                <a class="calendar-event-title" href="<%= ev.link %>" target="_blank" rel="noopener noreferrer"><%= ev.title %></a>
+              <% } else { %>
+                <span class="calendar-event-title"><%= ev.title %></span>
+              <% } %>
+              <span class="calendar-event-when"><%= ev.primary %></span>
+              <% if (ev.secondary) { %>
+                <span class="calendar-event-detail"><%= ev.secondary %></span>
+              <% } %>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+    <% } %>
+    <div class="quick-strip" role="navigation" aria-label="Quick links">
+      <% site.navLinks.filter(function (l) { return l.path !== '/'; }).slice(0, 4).forEach(function (link) { %>
+        <a class="quick-card" href="<%= link.path %>" <%= link.external ? 'target="_blank" rel="noopener"' : '' %>>
+          <strong><%= link.label %></strong>
+          <span><%= link.external ? 'Opens in a new tab' : 'On this portal' %></span>
+        </a>
+      <% }); %>
+    </div>
+  </div>
+  <% if (typeof poll !== 'undefined' && poll) { %>
+    <%- include('partials/poll-sidebar') %>
+  <% } %>
+</div>
+<%- include('partials/bottom') %>

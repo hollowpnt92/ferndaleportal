@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3050:3000"
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+    volumes:
+      - portal-data:/app/data
+      - ./sa.json:/app/secrets/gcal-sa.json:ro
+    restart: unless-stopped
+
+volumes:
+  portal-data:

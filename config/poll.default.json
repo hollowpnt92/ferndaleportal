@@ -1,0 +1,9 @@
+{
+  "question": "What should we focus on next quarter?",
+  "options": [
+    { "id": "opt-default-1", "label": "Community events" },
+    { "id": "opt-default-2", "label": "Infrastructure" },
+    { "id": "opt-default-3", "label": "Youth programs" }
+  ],
+  "votes": []
+}

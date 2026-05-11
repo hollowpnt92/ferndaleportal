@@ -1,0 +1,12 @@
+node_modules/
+.env
+data/site.json
+data/poll.json
+data/sessions/
+.DS_Store
+npm-debug.log*
+
+# Google Calendar service account JSON (never commit)
+secrets/
+*-sa.json
+sa.json

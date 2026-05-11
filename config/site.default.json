@@ -1,0 +1,44 @@
+{
+  "heroTitle": "Welcome to Ferndale",
+  "heroSubtitle": "Connect with neighbors, find local resources, and stay informed. Whether you live here or are visiting, we're glad you're here.",
+  "homeContent": "<p>Use the navigation above to explore this portal. Administrators can customize pages, links, and announcements from the admin console.</p><p><strong>Tip:</strong> Sign in with the community password to see additional links for neighbors and partners.</p>",
+  "navLinks": [
+    { "label": "Home", "path": "/", "external": false },
+    { "label": "About", "path": "/p/about", "external": false },
+    { "label": "Services", "path": "/p/services", "external": false },
+    { "label": "Calendar", "path": "/p/calendar", "external": false }
+  ],
+  "memberNavLinks": [
+    { "label": "Member updates", "path": "/p/member-updates", "external": false },
+    { "label": "Neighborhood resources", "path": "/p/neighborhood", "external": false }
+  ],
+  "pages": [
+    {
+      "slug": "about",
+      "title": "About",
+      "content": "<p>This community portal provides a central place for announcements, documents, and links your organization maintains. Replace this text from the admin interface.</p>"
+    },
+    {
+      "slug": "services",
+      "title": "Services",
+      "content": "<p>List permits, utilities, parking, departments, or partner services here. Administrators can edit this page and add outbound links as needed.</p>"
+    },
+    {
+      "slug": "calendar",
+      "title": "Calendar",
+      "content": "<p>Post upcoming meetings, events, and deadlines. Content is edited through the admin portal.</p>"
+    },
+    {
+      "slug": "member-updates",
+      "title": "Member updates",
+      "memberOnly": true,
+      "content": "<p>This section is visible after signing in with the shared community password. Use it for announcements, draft policies, or partner-only links your organization agrees to share.</p>"
+    },
+    {
+      "slug": "neighborhood",
+      "title": "Neighborhood resources",
+      "memberOnly": true,
+      "content": "<p>Authenticated members can list local groups, meeting notes, or volunteer opportunities here. Content is maintained by portal administrators.</p>"
+    }
+  ]
+}

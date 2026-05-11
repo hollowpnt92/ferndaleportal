@@ -1,0 +1,23 @@
+<%- include('partials/top') %>
+<section class="hero" aria-labelledby="adm-heading">
+  <div class="hero-inner">
+    <h1 id="adm-heading">Administrator sign in</h1>
+    <p class="hero-lead">Edit homepage copy, navigation, and internal pages.</p>
+  </div>
+</section>
+<div class="layout">
+  <div class="card" style="max-width: 28rem;">
+    <% if (error) { %>
+      <div class="alert alert-error" role="alert"><%= error %></div>
+    <% } %>
+    <form method="post" action="/admin/login" class="form-stack">
+      <label for="password">Admin password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" style="background: var(--fern-green); color: #fff;">Sign in</button>
+        <a href="/">Home</a>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('partials/bottom') %>

@@ -1,0 +1,19 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-meta">
+      <strong><%= site.heroTitle %></strong><br>
+      Community portal · Content is managed locally by your administrators (Larry Big Dawg VanOverbeke).
+    </div>
+    <div class="footer-links">
+      <% if (typeof siteGateEnabled !== 'undefined' && siteGateEnabled) { %>
+        <form action="/site-gate/logout" method="post" style="display:inline;">
+          <button type="submit" class="footer-btn-link">Exit site session</button>
+        </form>
+      <% } %>
+      <a href="/login">Community sign in</a>
+      <a href="/admin/login">Admin</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

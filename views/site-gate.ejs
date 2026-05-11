@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site access · <%= site.heroTitle %></title>
+  <link rel="icon" href="/ferndale.jpg" type="image/jpeg" sizes="any">
+  <link rel="apple-touch-icon" href="/ferndale.jpg">
+  <link rel="stylesheet" href="/css/ferndale.css">
+</head>
+<body>
+<a class="skip-link" href="#gate-main">Skip to form</a>
+<div class="site-gate-page">
+  <header class="site-gate-brand site-gate-brand-with-logo" role="banner">
+    <img class="site-gate-logo" src="/ferndale.jpg" alt="" width="56" height="56" decoding="async">
+    <div class="site-gate-brand-text">
+      <span class="brand-kicker">Protected site</span>
+      <span class="brand-title"><%= site.heroTitle %></span>
+    </div>
+  </header>
+  <main id="gate-main" class="site-gate-main card">
+    <h1 class="site-gate-heading">Enter site password</h1>
+    <p class="site-gate-lead">This portal requires a password before you can view pages.</p>
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error" role="alert"><%= error %></div>
+    <% } %>
+    <form method="post" action="/site-gate" class="form-stack">
+      <input type="hidden" name="next" value="<%= typeof next !== 'undefined' ? next : '/' %>">
+      <label for="gate-password">Password</label>
+      <input type="password" id="gate-password" name="password" required autocomplete="current-password" autofocus>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary site-gate-submit">Continue</button>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>

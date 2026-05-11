@@ -1,0 +1,24 @@
+<%- include('partials/top') %>
+<section class="hero" aria-labelledby="login-heading">
+  <div class="hero-inner">
+    <h1 id="login-heading">Community sign in</h1>
+    <p class="hero-lead">Enter the shared password to see additional navigation links and member pages.</p>
+  </div>
+</section>
+<div class="layout">
+  <div class="card" style="max-width: 28rem;">
+    <% if (error) { %>
+      <div class="alert alert-error" role="alert"><%= error %></div>
+    <% } %>
+    <form method="post" action="/login" class="form-stack">
+      <input type="hidden" name="next" value="<%= typeof nextPath !== 'undefined' ? nextPath : '/' %>">
+      <label for="password">Shared password</label>
+      <input type="password" id="password" name="password" required autocomplete="current-password">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" style="background: var(--fern-green); color: #fff;">Sign in</button>
+        <a href="/">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('partials/bottom') %>
